@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-200: #e9eaeb;
+  --color-gray-400: #a4a7ae;
+  --color-gray-600: #535862;
+  --color-gray-800: #252b37;
+  --color-accent: #ae8c69;
+  --button-radius: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-black);
+    color: var(--color-gray-200);
+  }
+}
+
+@layer components {
+  .btn-slide-primary {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.05s ease 0s;
+  }
+
+  .btn-slide-primary:hover {
+    color: var(--color-white);
+    transition: color 0.12s ease 0.18s;
+  }
+
+  .btn-slide-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-black);
+    border-radius: inherit;
+    transform: translateX(-105%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-slide-primary:hover::before {
+    transform: translateX(0);
+  }
+
+  .btn-slide-outline {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.05s ease 0s;
+  }
+
+  .btn-slide-outline:hover {
+    color: var(--color-black);
+    transition: color 0.12s ease 0.18s;
+  }
+
+  .btn-slide-outline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-white);
+    border-radius: inherit;
+    transform: translateX(105%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-slide-outline:hover::before {
+    transform: translateX(0);
+  }
+
+  .container-site {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 48px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-site {
+      padding-inline: 80px;
+    }
+  }
+}
