@@ -37,7 +37,7 @@ const projects: Project[] = [
   {
     index: '04 / 04',
     name: 'FrenchAssistant.com',
-    description: 'AI-powered tools and curated resources for French learners.',
+    description: 'AI powered tools and curated resources for French learners.',
     domain: 'frenchassistant.com',
     href: 'https://frenchassistant.com',
   },
