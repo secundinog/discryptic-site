@@ -36,10 +36,10 @@ const projects: Project[] = [
   },
   {
     index: '04 / 04',
-    name: 'Parlay.com',
-    description: 'Data-driven content and resources for sports wagering.',
-    domain: 'Parlay.com',
-    href: 'https://parlay.com',
+    name: 'FrenchAssistant.com',
+    description: 'AI-powered tools and curated resources for French learners.',
+    domain: 'frenchassistant.com',
+    href: 'https://frenchassistant.com',
   },
 ]
 
