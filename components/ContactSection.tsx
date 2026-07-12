@@ -28,6 +28,7 @@ function FormField({
           name={id}
           placeholder={placeholder}
           rows={6}
+          required
           disabled={disabled}
           className="w-full resize-none border-b border-gray-800 bg-transparent pb-4 text-base text-gray-200 placeholder-gray-400 outline-none transition-colors focus:border-gray-400 disabled:cursor-default"
         />
@@ -37,6 +38,7 @@ function FormField({
           name={id}
           type={type}
           placeholder={placeholder}
+          required
           disabled={disabled}
           className="w-full border-b border-gray-800 bg-transparent pb-3 text-base text-gray-200 placeholder-gray-400 outline-none transition-colors focus:border-gray-400 disabled:cursor-default"
         />
@@ -45,12 +47,32 @@ function FormField({
   )
 }
 
-export default function ContactSection() {
-  const [submitted, setSubmitted] = useState(false)
+type FormStatus = 'idle' | 'sending' | 'success' | 'error'
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+export default function ContactSection() {
+  const [status, setStatus] = useState<FormStatus>('idle')
+  const submitted = status === 'success'
+  const sending = status === 'sending'
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
+    const formData = new FormData(e.currentTarget)
+    setStatus('sending')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.get('name'),
+          email: formData.get('email'),
+          message: formData.get('message'),
+        }),
+      })
+      setStatus(res.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -66,20 +88,20 @@ export default function ContactSection() {
         <div className="w-full max-w-lg lg:ml-auto">
           <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             <div className={`flex flex-col gap-8 transition-opacity duration-500 ${submitted ? 'pointer-events-none opacity-30' : 'opacity-100'}`}>
-              <FormField id="name" label="Name" placeholder="Your name" disabled={submitted} />
+              <FormField id="name" label="Name" placeholder="Your name" disabled={submitted || sending} />
               <FormField
                 id="email"
                 label="Email"
                 type="email"
                 placeholder="you@example.com"
-                disabled={submitted}
+                disabled={submitted || sending}
               />
               <FormField
                 id="message"
                 label="Message"
                 placeholder="What are you working on?"
                 multiline
-                disabled={submitted}
+                disabled={submitted || sending}
               />
             </div>
 
@@ -92,22 +114,28 @@ export default function ContactSection() {
                   Thanks — we&apos;ll be in touch.{' '}
                   <button
                     type="button"
-                    onClick={() => setSubmitted(false)}
+                    onClick={() => setStatus('idle')}
                     className="text-gray-200 underline underline-offset-2 transition-colors hover:text-white"
                   >
                     Send another
                   </button>
+                </p>
+              ) : status === 'error' ? (
+                <p role="alert" className="text-sm text-red-400">
+                  Something went wrong. Please try again.
                 </p>
               ) : (
                 <span />
               )}
               <button
                 type="submit"
-                disabled={submitted}
+                disabled={submitted || sending}
                 className={`rounded-btn px-4 py-2.5 text-base font-semibold ${
                   submitted
                     ? 'flex items-center gap-2 bg-gray-800 text-gray-400 cursor-default transition-colors duration-300'
-                    : 'btn-slide-primary border border-transparent bg-site-white text-site-black'
+                    : sending
+                      ? 'bg-gray-800 text-gray-400 cursor-default transition-colors duration-300'
+                      : 'btn-slide-primary border border-transparent bg-site-white text-site-black'
                 }`}
               >
                 {submitted ? (
@@ -117,6 +145,8 @@ export default function ContactSection() {
                     </svg>
                     Sent
                   </>
+                ) : sending ? (
+                  'Sending…'
                 ) : (
                   <span className="relative z-10">Submit</span>
                 )}
