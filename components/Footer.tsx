@@ -11,7 +11,7 @@ const portfolioLinks = [
   { label: 'Appster', href: 'https://appster.com' },
   { label: 'LaborCompliance', href: 'https://laborcompliance.com' },
   { label: 'MoneyCare', href: 'https://moneycare.com' },
-  { label: 'Parlay', href: 'https://parlay.com' },
+  { label: 'French Assistant', href: 'https://frenchassistant.com' },
 ]
 
 export default function Footer() {
